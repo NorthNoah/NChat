@@ -1,6 +1,6 @@
 const express = require("express")
 const app = express()
-const PORT = 4000
+const PORT = 6000
 
 // 导入HTTP和cors库
 const server = require("http").Server(app)
@@ -18,11 +18,9 @@ const socketIO = new Server(server, {
 })
 
 // 监听连接
-socketIO.on('connection', (socket) => {
-    console.log(`${socket.id}用户已连接`)
-    socket.on('disconnect', () => [
-        console.log("一个用户已经断开连接")
-    ])
+socketIO.on("connection", (socket) => {
+	console.log(`${socket.id}用户已连接`)
+	socket.on("disconnect", () => [console.log("一个用户已经断开连接")])
 })
 
 app.get("/api", (req, res) => {
@@ -32,5 +30,5 @@ app.get("/api", (req, res) => {
 })
 
 app.listen(PORT, () => {
-	console.log("server listening on ${PORT}")
+	console.log(`server listening on ${PORT}`)
 })

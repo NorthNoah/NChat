@@ -1,7 +1,8 @@
 import socketIO from "socket.io-client"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import Home from './components/Home.tsx'
-import ChatPage from './components/Home.tsx'
+import Register from "./pages/Register"
+import Login from "./pages/Login"
+import Chat from './pages/Chat'
 const socket = socketIO.connect("http://localhost:6000")
 
 function App() {
@@ -9,9 +10,10 @@ function App() {
 		<BrowserRouter>
 			<div className="App">
 				<Routes>
-          <Route path="/" element={<Home/>}/>
-          <Route path="/chat" element={<ChatPage/>}/>
-        </Routes>
+					<Route path="/register" element={<Register />} />
+					<Route path="/login" element={<Login />} />
+					<Route path="/" element={<Chat />} />
+				</Routes>
 			</div>
 		</BrowserRouter>
 	)

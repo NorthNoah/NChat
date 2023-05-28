@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import { Button, Form, Input, notification } from "antd"
 import Logo from "../assets/logo.svg"
 import { Link } from "react-router-dom"
-import axios from 'axios'
+import axios from "axios"
 import { registerRoute } from "../utils/APIRoutes"
 
 export default function Register() {
@@ -20,13 +20,17 @@ export default function Register() {
 
 	// 处理form表单完成时的回调
 	const onFinish = async (event) => {
-    const { password, confirmPassword, username, email } = values
-    const { data } = await axios.post(registerRoute, {
-      username,
-      email,
-      password,
-      confirmPassword
-    })
+		const { password, confirmPassword, username, email } = values
+		const { data } = await axios({
+			method: "post",
+			url: registerRoute,
+			data: {
+				password,
+				username,
+				email,
+				confirmPassword,
+			},
+		})
 	}
 	// 处理input变化时的回调,进行setValues
 	const onChange = (event) => {

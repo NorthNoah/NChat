@@ -1,13 +1,16 @@
-const PORT=6000
+const PORT=5000
 const MONGO_URL="mongodb://localhost:27017/chat"
 const express = require("express")
 const app = express()
+const userRoutes = require("./routes/userRoutes")
 
 // 导入cors库
 const cors = require("cors")
 const mongoose = require("mongoose")
 app.use(cors())
 app.use(express.json())
+// 用户路由
+app.use("/api/auth", userRoutes)
 
 // mongoose连接数据库
 mongoose

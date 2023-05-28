@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Register from "./pages/Register"
 import Login from "./pages/Login"
 import Chat from './pages/Chat'
-const socket = socketIO.connect("http://localhost:6000")
+// const socket = socketIO.connect("http://localhost:6000")
 
 function App() {
 	return (

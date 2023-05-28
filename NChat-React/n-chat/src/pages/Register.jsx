@@ -2,11 +2,12 @@ import styled from "@emotion/styled"
 import React, { useState } from "react"
 import { Button, Form, Input, notification } from "antd"
 import Logo from "../assets/logo.svg"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { registerRoute } from "../utils/APIRoutes"
 
 export default function Register() {
+  const navigate = useNavigate()
 	const layout = {
 		labelCol: { span: 8 },
 		wrapperCol: { span: 32 },
@@ -21,6 +22,7 @@ export default function Register() {
 	// 处理form表单完成时的回调
 	const onFinish = async (event) => {
 		const { password, confirmPassword, username, email } = values
+    // post注册信息，返回体中包含注册成功/失败信息
 		const { data } = await axios({
 			method: "post",
 			url: registerRoute,
@@ -28,9 +30,17 @@ export default function Register() {
 				password,
 				username,
 				email,
-				confirmPassword,
+				confirmPassword
 			},
 		})
+    if (data.status === false) {
+      openNotification(data.msg)
+    }
+    if (data.status === true) {
+      localStorage.setItem('NChat-user', JSON.stringify(data.user))
+      navigate("/")
+    }
+    
 	}
 	// 处理input变化时的回调,进行setValues
 	const onChange = (event) => {
@@ -40,13 +50,10 @@ export default function Register() {
 		})
 	}
 
-	// 处理提交
-	const onClick = (e) => {}
-
-	const openNotification = () => {
+	const openNotification = (msg) => {
 		notification.open({
-			message: "温馨提示",
-			description: "两次输入的密码不一致哟，请重新输入~",
+			message: "Tips",
+			description: msg,
 			onClick: () => {
 				console.log("Notification Clicked!")
 			},
@@ -149,7 +156,6 @@ export default function Register() {
 						<Button
 							// type="primary"
 							htmlType="submit"
-							onClick={(e) => onClick(e)}
 							className="button"
 							block="true"
 							size="large"

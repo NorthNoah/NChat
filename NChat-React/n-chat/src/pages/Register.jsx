@@ -1,13 +1,19 @@
 import styled from "@emotion/styled"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Button, Form, Input, notification } from "antd"
 import Logo from "../assets/logo.svg"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { registerRoute } from "../utils/APIRoutes"
+import useOpenNotification from "../components/Notification"
 
 export default function Register() {
-  const navigate = useNavigate()
+	const navigate = useNavigate()
+	useEffect(() => {
+		if (localStorage.getItem("NChat-user")) {
+			navigate("/")
+		}
+	}, [navigate])
 	const layout = {
 		labelCol: { span: 8 },
 		wrapperCol: { span: 32 },
@@ -22,7 +28,7 @@ export default function Register() {
 	// 处理form表单完成时的回调
 	const onFinish = async (event) => {
 		const { password, confirmPassword, username, email } = values
-    // post注册信息，返回体中包含注册成功/失败信息
+		// post注册信息，返回体中包含注册成功/失败信息
 		const { data } = await axios({
 			method: "post",
 			url: registerRoute,
@@ -30,17 +36,16 @@ export default function Register() {
 				password,
 				username,
 				email,
-				confirmPassword
+				confirmPassword,
 			},
 		})
-    if (data.status === false) {
-      openNotification(data.msg)
-    }
-    if (data.status === true) {
-      localStorage.setItem('NChat-user', JSON.stringify(data.user))
-      navigate("/")
-    }
-    
+		if (data.status === false) {
+			openNotification(data.msg)
+		}
+		if (data.status === true) {
+			localStorage.setItem("NChat-user", JSON.stringify(data.user))
+			navigate("/")
+		}
 	}
 	// 处理input变化时的回调,进行setValues
 	const onChange = (event) => {
@@ -49,14 +54,10 @@ export default function Register() {
 			[event.target.name]: event.target.value,
 		})
 	}
-
 	const openNotification = (msg) => {
 		notification.open({
 			message: "Tips",
 			description: msg,
-			onClick: () => {
-				console.log("Notification Clicked!")
-			},
 		})
 	}
 
@@ -183,6 +184,7 @@ const FormContainer = styled.div`
 
 	.brand {
 		display: flex;
+		justify-content: center;
 		align-items: center;
 		gap: 1rem;
 		img {

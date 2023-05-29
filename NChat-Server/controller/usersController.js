@@ -21,8 +21,49 @@ module.exports.register = async (req, res, next) => {
 			password: hashedPassword,
 		})
 		delete user.password
-		return res.json({ status: true, user })//返回true状态和user对象
+		return res.json({ status: true, user }) //返回true状态和user对象
 	} catch (error) {
-        next(error)
-    }
+		next(error)
+	}
+}
+
+module.exports.login = async (req, res, next) => {
+	try {
+		const { username, password } = req.body
+		const user = await User.findOne({ username })
+		// 1.检验用户是否存在
+		if (!user) {
+			return res.json({ msg: "不正确的用户名或密码哦", status: false })
+		}
+		// 2.检验密码是否正确，前端发送的password和user.password进行比较
+		const isPasswordValid = await bcrypt.compare(password, user.password)
+		if (!isPasswordValid) {
+			return res.json({ msg: "不正确的用户名或密码哦", status: false })
+		}
+		delete user.password
+		return res.json({ status: true, user }) //返回true状态和user对象
+	} catch (error) {
+		next(error)
+	}
+}
+
+module.exports.setAvatar = async (req, res, next) => {
+	try {
+		const userId = req.params.id
+		const avatarImage = req.body.image
+		const userData = await User.findByIdAndUpdate(
+			userId,
+			{
+				isAvatarImageSet: true,
+				avatarImage,
+			},
+			{ new: true }
+		)
+		return res.json({
+			isSet: userData.isAvatarImageSet,
+			image: userData.avatarImage,
+		})
+	} catch (err) {
+		next(err)
+	}
 }

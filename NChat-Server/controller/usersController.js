@@ -67,3 +67,18 @@ module.exports.setAvatar = async (req, res, next) => {
 		next(err)
 	}
 }
+
+module.exports.getAllUsers = async (req, res, next) => {
+	try {
+		// 取数据库中对应id的User对象，select所需的字段
+		const users = await User.find({_id: {$ne: req.params.id}}.select([
+			"email",
+			"username",
+			"avtarImage",
+			"_id"
+		]))
+	} catch (err) {
+		next(err)
+	}
+}
+

@@ -9,6 +9,8 @@ import Contacts from '../components/Contacts'
 export default function Chat() {
   const [contacts, setContacts] = useState([])
   const [curUser, setCurUser] = useState(undefined)
+  const [currentChat, setCurrentChat] = useState(undefined);
+
   const navigate = useNavigate()
   // 异步和同步代码的区别是什么？
   useEffect(() => {
@@ -33,12 +35,14 @@ export default function Chat() {
         })
         setContacts(data.data)
       } else {
-        navigate("/setAvatar")
+        // navigate("/setAvatar")
       }
     }
     setCurContact()
   },[curUser]) 
-  
+  const handleChatChange = (chat) => {
+    setCurrentChat(chat);
+  }
   return (
     <>
     <Container>
@@ -46,6 +50,9 @@ export default function Chat() {
         <Contacts contacts={contacts}/>
         <div>ss12</div>
       </div>
+      <div className="container">
+          <Contacts contacts={contacts} changeChat={handleChatChange} />
+        </div>
     </Container>
     </>
   )

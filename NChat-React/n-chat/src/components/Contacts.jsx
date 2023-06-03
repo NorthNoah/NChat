@@ -10,11 +10,10 @@ export default function Contacts({ contacts, curUser, changeChat }) {
 	const [curSelected, setCurSelected] = useState("")
 
 	// 状态检测：如果存在curUser，设置其头像
-	const { avatar, username } = curUser
 	useEffect(() => {
 		if (curUser) {
-			setCurUserImage(avatar)
-			setCurUsername(username)
+			setCurUserImage(curUser.avatarImage)
+			setCurUsername(curUser.username)
 		}
 	}, [curUser])
 

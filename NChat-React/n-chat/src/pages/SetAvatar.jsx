@@ -2,9 +2,11 @@ import styled from "@emotion/styled"
 import React, { useEffect, useState } from "react"
 import { Button, notification, Avatar, Spin } from "antd"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
+// import axios from "axios"
+// import { service } from "../utils/myAxios"
 import { setAvatarRoute } from "../utils/APIRoutes"
 import { Buffer } from "buffer"
+import axios from "axios"
 export default function SetAvatar() {
 	const api = `https://api.multiavatar.com/4645646`
 	const REACT_APP_LOCALHOST_KEY = "NChat-current-user"
@@ -25,12 +27,20 @@ export default function SetAvatar() {
 				// const image = await axios.get(
 				// 	`${api}/${Math.round(Math.random() * 1000)}/`
 				// )
-				const image = await axios({
-					method: "get",
-					url: `${api}/${Math.round(Math.random() * 1000)}/`,
-				}).catch((err) => {
-					console.log("Axios error on url: " + this.url, " --> " + err)
-				})
+				// const image = await axios({
+				// 	method: "get",
+				// 	url: `${api}/${Math.round(Math.random() * 1000)}/`,
+				// }).catch((err) => {
+				// 	console.log("Axios error on url: " + this.url, " --> " + err)
+				// })
+				const image = await axios.get(
+					`${api}/${Math.round(Math.random() * 1000)}`
+				);
+				try {
+					
+				} catch (error) {
+					
+				}
 				const buffer = new Buffer(image.data)
 				// 将buffer中的image.data转换为base64字符串
 				data.push(buffer.toString("base64"))
@@ -40,6 +50,7 @@ export default function SetAvatar() {
 		}
 		randomAvatar()
 	}, [])
+	
 	const openNotification = (msg) => {
 		notification.open({
 			message: "Tips",
@@ -61,6 +72,7 @@ export default function SetAvatar() {
 					image: avatars[selectedAvatar],
 				},
 			})
+			console.log(data)
 			// 数据已经设置
 			if (data.isSet) {
 				user.isAvatarImageSet = true

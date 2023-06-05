@@ -9,11 +9,11 @@ import useOpenNotification from "../components/Notification"
 
 export default function Register() {
 	const navigate = useNavigate()
-	useEffect(() => {
-		if (localStorage.getItem("NChat-user")) {
-			navigate("/")
-		}
-	}, [navigate])
+	// useEffect(() => {
+	// 	if (localStorage.getItem("NChat-user")) {
+	// 		navigate("/")
+	// 	}
+	// }, [])
 	const layout = {
 		labelCol: { span: 8 },
 		wrapperCol: { span: 32 },
@@ -113,10 +113,10 @@ export default function Register() {
 							{ required: true, message: "请输入你的密码!" },
 							({ getFieldValue }) => ({
 								validator(_, value) {
-									if (!value || getFieldValue("password").length >= 8) {
+									if (!value || getFieldValue("password").length >= 6) {
 										return Promise.resolve()
 									}
-									return Promise.reject(new Error("密码长度需要在8个字符以上"))
+									return Promise.reject(new Error("密码长度需要在6个字符以上"))
 								},
 							}),
 						]}

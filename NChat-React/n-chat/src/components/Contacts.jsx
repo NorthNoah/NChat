@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import React, { useEffect, useState } from "react"
 import Logo from "../assets/logo.svg"
-import { Button, notification, Avatar, Spin } from "antd"
+import { Avatar } from "antd"
 // 将contact和curUser传入
 export default function Contacts({ contacts, curUser, changeChat }) {
 	// 需要存储name image和selected三个状态

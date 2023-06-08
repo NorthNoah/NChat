@@ -2,7 +2,7 @@ import styled from "styled-components"
 import React, { useEffect, useState } from "react"
 import { SmileOutlined, SendOutlined } from "@ant-design/icons"
 import Picker from "emoji-picker-react"
-export default function ChatInput() {
+export default function ChatInput({handleSendMsg}) {
 	const [msg, setMsg] = useState("")
 	const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 	const handleEmojiPicker = () => {
@@ -13,7 +13,19 @@ export default function ChatInput() {
 		message += emojiObj.emoji
 		setMsg(message)
 	}
-	const sendChat = () => {}
+
+  // submit-sendChat
+	const sendChat = (e) => {
+    e.preventDefault()
+    if (msg.length > 0) {
+      // handleSendMsg：从父组件传入
+      handleSendMsg(msg);
+      setMsg("");
+    }
+  }
+  
+
+
 	return (
 		<Container>
 			<div className="button-container">

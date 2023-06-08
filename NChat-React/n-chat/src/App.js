@@ -11,7 +11,7 @@ import SetAvatar from "./pages/SetAvatar"
 
 function App() {
 	return (
-		<ErrorBoundary FallbackComponent={ErrorFallback}>
+		// <ErrorBoundary FallbackComponent={ErrorFallback}>
 			<BrowserRouter>
 				<div className="App">
 					<Routes>
@@ -22,7 +22,7 @@ function App() {
 					</Routes>
 				</div>
 			</BrowserRouter>
-		</ErrorBoundary>
+		// </ErrorBoundary>
 	)
 }
 

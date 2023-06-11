@@ -1,4 +1,3 @@
-import socketIO from "socket.io-client"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { ErrorFallback } from "./components/ErrorBoundary"
 import { ErrorBoundary } from "react-error-boundary"
@@ -11,7 +10,7 @@ import SetAvatar from "./pages/SetAvatar"
 
 function App() {
 	return (
-		// <ErrorBoundary FallbackComponent={ErrorFallback}>
+		<ErrorBoundary FallbackComponent={ErrorFallback}>
 			<BrowserRouter>
 				<div className="App">
 					<Routes>
@@ -22,7 +21,7 @@ function App() {
 					</Routes>
 				</div>
 			</BrowserRouter>
-		// </ErrorBoundary>
+		</ErrorBoundary>
 	)
 }
 

@@ -106,6 +106,7 @@ export default function ChatContainer({ currentChat = {}, curUser, socket }) {
 								className={`message ${
 									message.fromSelf ? "sended" : "received"
 								}`}
+								ref={scrollRef}
 							>
 								<div className="content">
 									<p>{message.message}</p>

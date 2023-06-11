@@ -5,7 +5,6 @@ import Logo from "../assets/logo.svg"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { registerRoute } from "../utils/APIRoutes"
-import useOpenNotification from "../components/Notification"
 
 export default function Register() {
 	const navigate = useNavigate()

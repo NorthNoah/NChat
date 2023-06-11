@@ -7,7 +7,7 @@ import axios from "axios"
 import { loginRoute } from "../utils/APIRoutes"
 
 export default function Login() {
-	const REACT_APP_LOCALHOST_KEY = "NChat-current-user"
+	// const REACT_APP_LOCALHOST_KEY = "NChat-current-user"
 	// 登录状态识别,若有登录状态的字段则直接跳转到聊天界面
 	useEffect(() => {
 		if (localStorage.getItem("NChat-user")) {

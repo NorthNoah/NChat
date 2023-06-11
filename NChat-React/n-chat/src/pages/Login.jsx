@@ -7,10 +7,14 @@ import axios from "axios"
 import { loginRoute } from "../utils/APIRoutes"
 
 export default function Login() {
-	const REACT_APP_LOCALHOST_KEY = "NChat-current-user"
 	// 登录状态识别,若有登录状态的字段则直接跳转到聊天界面
+	// useEffect(() => {
+	// 	if (localStorage.getItem("NChat-user")) {
+	// 		navigate("/")
+	// 	}
+	// }, [])
 	useEffect(() => {
-		if (localStorage.getItem("NChat-user")) {
+		if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
 			navigate("/")
 		}
 	}, [])
@@ -55,8 +59,9 @@ export default function Login() {
 				openNotification(data.msg)
 			}
 			if (data.status === true) {
+				// localStorage.setItem("NChat-user", JSON.stringify(data.user))
 				localStorage.setItem(
-					"NChat-user",
+					process.env.REACT_APP_LOCALHOST_KEY,
 					JSON.stringify(data.user)
 				)
 				navigate("/")

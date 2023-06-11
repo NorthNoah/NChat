@@ -5,41 +5,56 @@ import Logout from "./Logout"
 import ChatInput from "./ChatInput"
 import axios from "axios"
 import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes"
+import { v4 as uuidv4 } from "uuid"
 
-export default function ChatContainer({ currentChat = {}, curUser, socket }) {
+export default function ChatContainer({ currentChat = {}, socket }) {
 	// 回显信息逻辑：每次curChat更新时，都要去获取数据库中的所有message，更新视图
 	const [messages, setMessages] = useState([])
-	const [arrivalMessage, setArrivalMessage] = useState("")
+	const [arrivalMessage, setArrivalMessage] = useState(null)
 	const scrollRef = useRef()
 
 	useEffect(() => {
 		const getMsg = async () => {
-			if (currentChat) {
-				const response = await axios.post(recieveMessageRoute, {
-					from: curUser._id,
-					to: currentChat._id,
-				})
-				console.log(response)
-				setMessages(response.data)
-			}
+			// 此处获取data即为curUser，无需传入curUser
+			const data = await JSON.parse(
+				localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+			)
+			const response = await axios.post(recieveMessageRoute, {
+				from: data._id,
+				to: currentChat._id,
+			})
+			setMessages(response.data)
 		}
 		getMsg()
-		console.log(messages)
+	}, [currentChat, arrivalMessage])
+
+	useEffect(() => {
+		const getCurrentChat = async () => {
+			if (currentChat) {
+				await JSON.parse(
+					localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+				)._id
+			}
+		}
+		getCurrentChat()
 	}, [currentChat])
 
 	const handleSendMsg = async (msg) => {
+		const data = await JSON.parse(
+			localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+		)
+		socket.current.emit("send-msg", {
+			to: currentChat._id,
+			from: data._id,
+			msg,
+		})
 		// 发送信息逻辑：
 		// axios的post请求，发送到相应路由
 		await axios.post(sendMessageRoute, {
 			// 当前聊天对象
 			to: currentChat._id,
 			// 当前登录用户
-			from: curUser._id,
-			message: msg,
-		})
-		socket.current.emit("send-msg", {
-			to: currentChat._id,
-			from: curUser._id,
+			from: data._id,
 			message: msg,
 		})
 		// 处理自己发送的消息，需要在fromSelf中标记
@@ -58,13 +73,11 @@ export default function ChatContainer({ currentChat = {}, curUser, socket }) {
 				})
 			})
 		}
-	})
+	}, [])
 
 	// 消息发送过来，更新数据，并合并到消息的state中
 	useEffect(() => {
-		if (arrivalMessage) {
-			setMessages((prev) => [...prev, arrivalMessage])
-		}
+		arrivalMessage && setMessages((prev) => [...prev, arrivalMessage])
 	}, [arrivalMessage])
 
 	// 消息变化时，平滑滚动视图的效果
@@ -75,7 +88,6 @@ export default function ChatContainer({ currentChat = {}, curUser, socket }) {
 			block: "end",
 			inline: "nearest",
 		})
-		console.log("平滑启动")
 	}, [messages])
 
 	return (
@@ -102,13 +114,15 @@ export default function ChatContainer({ currentChat = {}, curUser, socket }) {
 					{/* <Messages messages={messages}/> */}
 					{messages.map((message) => {
 						return (
-							<div
-								className={`message ${
-									message.fromSelf ? "sended" : "received"
-								}`}
-							>
-								<div className="content">
-									<p>{message.message}</p>
+							<div ref={scrollRef} key={uuidv4()}>
+								<div
+									className={`message ${
+										message.fromSelf ? "sended" : "received"
+									}`}
+								>
+									<div className="content">
+										<p>{message.message}</p>
+									</div>
 								</div>
 							</div>
 						)

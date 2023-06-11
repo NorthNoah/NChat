@@ -19,15 +19,21 @@ export default function Chat() {
 	// 异步和同步代码的区别是什么？
 	useEffect(() => {
 		const setUser = async () => {
-			if (!localStorage.getItem("NChat-user")) {
+			// if (!localStorage.getItem("NChat-user")) {
+			if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
 				navigate("/login")
 			} else {
 				// 必须为异步，setCurUser顺序要在setContact前
-				setCurUser(await JSON.parse(localStorage.getItem("NChat-user")))
+				// setCurUser(await JSON.parse(localStorage.getItem("NChat-user")))
+				setCurUser(
+					await JSON.parse(
+						localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+					)
+				)
 			}
 		}
 		setUser()
-	}, [navigate])
+	}, [])
 
 	// 创建套接字,且当目前用户切换时，重新触发effect
 	useEffect(() => {
@@ -35,9 +41,7 @@ export default function Chat() {
 			socket.current = io(host)
 			// 传递当前用户id，添加到后端的全局map中
 			socket.current.emit("add-user", curUser._id)
-
 		}
-
 	}, [curUser])
 
 	useEffect(() => {

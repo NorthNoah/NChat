@@ -6,7 +6,10 @@ export default function Welcome() {
 	useEffect(() => {
 		const setCurName = async () => {
 			setUsername(
-        await JSON.parse(localStorage.getItem("NChat-user")).username
+        // await JSON.parse(localStorage.getItem("NChat-user")).username
+				await JSON.parse(
+					localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+				).username
       )
 		}
 		setCurName()

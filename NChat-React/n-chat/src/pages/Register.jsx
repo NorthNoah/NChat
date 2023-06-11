@@ -14,6 +14,11 @@ export default function Register() {
 	// 		navigate("/")
 	// 	}
 	// }, [])
+	useEffect(() => {
+		if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+			navigate("/")
+		}
+	}, [])
 	const layout = {
 		labelCol: { span: 8 },
 		wrapperCol: { span: 32 },
@@ -43,7 +48,11 @@ export default function Register() {
 			openNotification(data.msg)
 		}
 		if (data.status === true) {
-			localStorage.setItem("NChat-user", JSON.stringify(data.user))
+			// localStorage.setItem("NChat-user", JSON.stringify(data.user))
+			localStorage.setItem(
+				process.env.REACT_APP_LOCALHOST_KEY,
+				JSON.stringify(data.user)
+			)
 			navigate("/")
 		}
 	}

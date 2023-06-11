@@ -47,6 +47,7 @@ const socketIO = socket(server, {
 global.onlineUsers = new Map()
 // 监听连接
 socketIO.on("connection", (socket) => {
+  global.chatSocket = socket;
 	console.log(`${socket.id}用户已连接`)
 	socket.on("disconnect", () => [console.log("一个用户已经断开连接")])
 
@@ -54,6 +55,7 @@ socketIO.on("connection", (socket) => {
 	socket.on("add-user", (userId) => {
 		onlineUsers.set(userId, socket.id)
 	})
+
 	socket.on("send-msg", (data) => {
 		// 获取发送方的Socket
 		const sendUserSocket = onlineUsers.get(data.to)

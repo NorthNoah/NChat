@@ -1,5 +1,5 @@
 
-const { register, login, setAvatar, getAllUsers } = require('../controller/usersController.js')
+const { register, login, setAvatar, getAllUsers, logOut } = require('../controller/usersController.js')
 const { Router } = require('express');
 const router = Router();
 
@@ -9,5 +9,6 @@ router.post("/login", login)
 router.post("/setavatar/:id", setAvatar)
 // 获取所有用户
 router.get("/allusers/:id", getAllUsers)
+router.get("/logout/:id", logOut);
 
 module.exports = router

@@ -14,11 +14,19 @@ export default function SetAvatar() {
 	const [avatars, setAvatars] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
 	const [selectedAvatar, setSelectedAvatar] = useState(undefined)
+	// useEffect(() => {
+	// 	if (!localStorage.getItem("NChat-user")) {
+	// 		navigate('/login')
+	// 	}
+	// })
 	useEffect(() => {
-		if (!localStorage.getItem("NChat-user")) {
-			navigate('/login')
+		const isLogin = async () => {
+			if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
+				navigate("/login")
 		}
-	})
+		isLogin()
+	}, [])
+
 	useEffect(() => {
 		// 异步函数要进行封装后再执行，不能直接传入异步函数
 		const randomAvatar = async () => {
@@ -35,12 +43,9 @@ export default function SetAvatar() {
 				// })
 				const image = await axios.get(
 					`${api}/${Math.round(Math.random() * 1000)}`
-				);
+				)
 				try {
-					
-				} catch (error) {
-					
-				}
+				} catch (error) {}
 				const buffer = new Buffer(image.data)
 				// 将buffer中的image.data转换为base64字符串
 				data.push(buffer.toString("base64"))
@@ -50,7 +55,7 @@ export default function SetAvatar() {
 		}
 		randomAvatar()
 	}, [])
-	
+
 	const openNotification = (msg) => {
 		notification.open({
 			message: "Tips",
@@ -63,7 +68,10 @@ export default function SetAvatar() {
 			openNotification(avatarMsg)
 		} else {
 			// 取出本地存储中的user对象
-			const user = await JSON.parse(localStorage.getItem("NChat-user"))
+			// const user = await JSON.parse(localStorage.getItem("NChat-user"))
+			const user = await JSON.parse(
+				localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+			)
 			const { data } = await axios({
 				method: "post",
 				// 注意要提交到对应id的user里
@@ -77,8 +85,9 @@ export default function SetAvatar() {
 			if (data.isSet) {
 				user.isAvatarImageSet = true
 				user.avatarImage = data.image
+				// localStorage.setItem("NChat-user", JSON.stringify(user))
 				localStorage.setItem(
-					"NChat-user",
+					process.env.REACT_APP_LOCALHOST_KEY,
 					JSON.stringify(user)
 				)
 				navigate("/")

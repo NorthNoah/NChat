@@ -3,20 +3,31 @@ import React, { useEffect, useState } from "react"
 import Logo from "../assets/logo.svg"
 import { Avatar } from "antd"
 // 将contact和curUser传入
-export default function Contacts({ contacts, curUser, changeChat }) {
+export default function Contacts({ contacts, changeChat }) {
 	// 需要存储name image和selected三个状态
 	const [curUsername, setCurUsername] = useState("")
 	const [curUserImage, setCurUserImage] = useState("")
 	const [curSelected, setCurSelected] = useState("")
 
 	// 状态检测：如果存在curUser，设置其头像
+	// useEffect(() => {
+	// 	console.log(contacts)
+	// 	if (curUser) {
+	// 		setCurUserImage(curUser.avatarImage)
+	// 		setCurUsername(curUser.username)
+	// 	}
+	// }, [curUser])
+
 	useEffect(() => {
-		console.log(contacts)
-		if (curUser) {
-			setCurUserImage(curUser.avatarImage)
-			setCurUsername(curUser.username)
+		const getUser = async () => {
+			const data = await JSON.parse(
+				localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+			)
+			setCurUsername(data.username)
+			setCurUserImage(data.avatarImage)
 		}
-	}, [curUser])
+		getUser()
+	}, [])
 
 	// 切换当前聊天
 	const changeCurChat = (index, contact) => {

@@ -5,13 +5,13 @@ import Logout from "./Logout"
 import ChatInput from "./ChatInput"
 import axios from "axios"
 import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes"
+import { v4 as uuidv4 } from "uuid"
 
 export default function ChatContainer({ currentChat = {}, curUser, socket }) {
 	// 回显信息逻辑：每次curChat更新时，都要去获取数据库中的所有message，更新视图
 	const [messages, setMessages] = useState([])
 	const [arrivalMessage, setArrivalMessage] = useState("")
 	const scrollRef = useRef()
-
 	useEffect(() => {
 		const getMsg = async () => {
 			if (currentChat) {
@@ -19,13 +19,11 @@ export default function ChatContainer({ currentChat = {}, curUser, socket }) {
 					from: curUser._id,
 					to: currentChat._id,
 				})
-				console.log(response)
 				setMessages(response.data)
 			}
 		}
 		getMsg()
-		console.log(messages)
-	}, [currentChat])
+	}, [curUser._id, currentChat])
 
 	const handleSendMsg = async (msg) => {
 		// 发送信息逻辑：
@@ -75,7 +73,6 @@ export default function ChatContainer({ currentChat = {}, curUser, socket }) {
 			block: "end",
 			inline: "nearest",
 		})
-		console.log("平滑启动")
 	}, [messages])
 
 	return (
@@ -102,14 +99,15 @@ export default function ChatContainer({ currentChat = {}, curUser, socket }) {
 					{/* <Messages messages={messages}/> */}
 					{messages.map((message) => {
 						return (
-							<div
-								className={`message ${
-									message.fromSelf ? "sended" : "received"
-								}`}
-								ref={scrollRef}
-							>
-								<div className="content">
-									<p>{message.message}</p>
+							<div ref={scrollRef} key={uuidv4()}>
+								<div
+									className={`message ${
+										message.fromSelf ? "sended" : "received"
+									}`}
+								>
+									<div className="content">
+										<p>{message.message}</p>
+									</div>
 								</div>
 							</div>
 						)

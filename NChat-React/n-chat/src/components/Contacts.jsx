@@ -11,7 +11,6 @@ export default function Contacts({ contacts, curUser, changeChat }) {
 
 	// 状态检测：如果存在curUser，设置其头像
 	useEffect(() => {
-		console.log(contacts)
 		if (curUser) {
 			setCurUserImage(curUser.avatarImage)
 			setCurUsername(curUser.username)

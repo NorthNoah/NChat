@@ -6,7 +6,7 @@ import { allUsersRoute, host } from "../utils/APIRoutes"
 import Contacts from "../components/Contacts"
 import Welcome from "../components/Welcome"
 import ChatContainer from "../components/ChatContainer"
-import { Socket, io } from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 export default function Chat() {
 	const [contacts, setContacts] = useState([])
@@ -35,10 +35,10 @@ export default function Chat() {
 			socket.current = io(host)
 			// 传递当前用户id，添加到后端的全局map中
 			socket.current.emit("add-user", curUser._id)
-
 		}
 
 	}, [curUser])
+
 
 	useEffect(() => {
 		const setCurContact = async () => {
@@ -54,6 +54,7 @@ export default function Chat() {
 		setCurContact()
 	}, [curUser])
 
+	
 	const handleChatChange = (chat) => {
 		setCurrentChat(chat)
 	}

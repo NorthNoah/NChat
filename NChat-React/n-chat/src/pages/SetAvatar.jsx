@@ -9,7 +9,6 @@ import { Buffer } from "buffer"
 import axios from "axios"
 export default function SetAvatar() {
 	const api = `https://api.multiavatar.com/4645646`
-	const REACT_APP_LOCALHOST_KEY = "NChat-current-user"
 	const navigate = useNavigate()
 	const [avatars, setAvatars] = useState([])
 	const [isLoading, setIsLoading] = useState(true)

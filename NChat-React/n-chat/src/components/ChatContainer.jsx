@@ -7,7 +7,7 @@ import axios from "axios"
 import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes"
 import { v4 as uuidv4 } from "uuid"
 
-export default function ChatContainer({ currentChat = {}, curUser, socket }) {
+export default function ChatContainer({ currentChat, curUser, socket }) {
 	// 回显信息逻辑：每次curChat更新时，都要去获取数据库中的所有message，更新视图
 	const [messages, setMessages] = useState([])
 	const [arrivalMessage, setArrivalMessage] = useState("")
@@ -23,7 +23,7 @@ export default function ChatContainer({ currentChat = {}, curUser, socket }) {
 			}
 		}
 		getMsg()
-	}, [curUser._id, currentChat])
+	}, [currentChat, arrivalMessage])
 
 	const handleSendMsg = async (msg) => {
 		// 发送信息逻辑：
@@ -48,14 +48,14 @@ export default function ChatContainer({ currentChat = {}, curUser, socket }) {
 
 	// 持续监听是否有消息发送过来
 	useEffect(() => {
-		if (socket.current) {
+		// if (socket.current) {
 			socket.current.on("msg-receive", (msg) => {
 				setArrivalMessage({
 					fromSelf: false,
 					messages: msg,
 				})
 			})
-		}
+		// }
 	})
 
 	// 消息发送过来，更新数据，并合并到消息的state中
